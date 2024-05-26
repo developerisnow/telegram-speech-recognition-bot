@@ -4,7 +4,7 @@ services:
   telegram-bot:
     build: .
     ports:
-      - "80:80"
+      - "8092:80"
     environment:
       - API_TOKEN=${API_TOKEN}
       - API_HASH=${API_HASH}
