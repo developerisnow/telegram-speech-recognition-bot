@@ -98,7 +98,7 @@ async def process_language_choice(message: types.Message, state: FSMContext):
         if config.speech_recognition_lib == 'whisper':
             text = transcribe_whisper(whisper_model, file_audio_path, language=lang_code)
         else:                        
-            # Конвертирование файла в WAV 16000 ��ц и одноканальный формат
+            # Конвертирование файла в WAV 16000 ц и одноканаль��ый формат
             converted_file_path = convert_to_wav(file_audio_path)
             text = transcribe_vosk(converted_file_path, vosk_model)
 

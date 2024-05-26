@@ -16,4 +16,3 @@ services:
       - VOSK_MODELS_PATH=${VOSK_MODELS_PATH}
     volumes:
       - .:/app
-      - .:/app
