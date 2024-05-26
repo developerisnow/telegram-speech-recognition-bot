@@ -13,7 +13,7 @@
 
 2. **Run the Docker Container**:
     ```bash
-    docker run -d -p 80:80 --name telegram-bot telegram-speech-recognition-bot
+    docker run -d -p 8092:80 --name telegram-bot telegram-speech-recognition-bot
     ```
 
 3. **Using Docker Compose**:
