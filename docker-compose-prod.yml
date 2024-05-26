@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  telegram-bot:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      - API_TOKEN=${API_TOKEN}
+      - API_HASH=${API_HASH}
+      - API_ID=${API_ID}
+      - CLIENT_NAME=${CLIENT_NAME}
+      - DOWNLOAD_BIG_FILES=${DOWNLOAD_BIG_FILES}
+      - WHISPER_MODEL=${WHISPER_MODEL}
+      - SPEECH_RECOGNITION_LIB=${SPEECH_RECOGNITION_LIB}
+      - VOSK_MODELS_PATH=${VOSK_MODELS_PATH}
+    volumes:
+      - .:/app
+      - .:/app

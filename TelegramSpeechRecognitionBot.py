@@ -29,15 +29,15 @@ parser = argparse.ArgumentParser(description="Python telegram bot")
 parser.add_argument("-d", "--dev", help="Debug", action="store_true")
 args = parser.parse_args(sys.argv[1:])
 
-if args.dev:
-    from config.dev.botToken import API_TOKEN, API_HASH, API_ID, CLIENT_NAME    
+API_TOKEN = os.getenv('API_TOKEN')
+API_HASH = os.getenv('API_HASH')
+API_ID = os.getenv('API_ID')
+CLIENT_NAME = os.getenv('CLIENT_NAME')
 
+if args.dev:
     logging.basicConfig(level=logging.DEBUG)
 else:
-    from config.prod.botToken import API_TOKEN, API_HASH, API_ID, CLIENT_NAME   
-
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.ERROR, filename = 'bot.log', encoding = 'UTF-8', datefmt = '%Y-%m-%d %H:%M:%S')
-
 
 app = Client(name=CLIENT_NAME, api_id=API_ID, api_hash=API_HASH, bot_token=API_TOKEN)
 bot = Bot(token = API_TOKEN)
@@ -98,7 +98,7 @@ async def process_language_choice(message: types.Message, state: FSMContext):
         if config.speech_recognition_lib == 'whisper':
             text = transcribe_whisper(whisper_model, file_audio_path, language=lang_code)
         else:                        
-            # Конвертирование файла в WAV 16000 Гц и одноканальный формат
+            # Конвертирование файла в WAV 16000 ��ц и одноканальный формат
             converted_file_path = convert_to_wav(file_audio_path)
             text = transcribe_vosk(converted_file_path, vosk_model)
 

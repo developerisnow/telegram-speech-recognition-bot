@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant Bot
+participant VoiceRecognitionStates
+participant Services
+participant Config
+
+User -> Bot: Send voice message
+Bot -> VoiceRecognitionStates: Set state to language
+Bot -> User: Prompt for language choice
+User -> Bot: Choose language
+Bot -> Services: Load model based on language
+Bot -> Services: Transcribe voice message
+Bot -> User: Send transcribed text
+@enduml
+

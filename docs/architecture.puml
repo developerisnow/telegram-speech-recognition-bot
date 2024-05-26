@@ -1,0 +1,43 @@
+@startuml
+!define RECTANGLE class
+
+RECTANGLE TelegramBot {
+  + start()
+  + help()
+  + handle_voice_message()
+  + process_language_choice()
+}
+
+RECTANGLE VoiceRecognitionStates {
+  + language: State
+}
+
+RECTANGLE Services {
+  + convert_to_wav()
+  + delete_file()
+  + unique_filename()
+  + load_vosk_model()
+  + transcribe_vosk()
+  + load_whisper_model()
+  + transcribe_whisper()
+}
+
+RECTANGLE Config {
+  + download_big_files: bool
+  + whisper_model: str
+  + speech_recognition_lib: str
+  + vosk_models_path: str
+}
+
+TelegramBot --> VoiceRecognitionStates : uses
+TelegramBot --> Services : uses
+TelegramBot --> Config : uses
+
+TelegramBot : start() -> send_welcome()
+TelegramBot : help() -> show_help()
+TelegramBot : handle_voice_message() -> process_voice_message()
+TelegramBot : process_language_choice() -> transcribe_voice()
+@enduml
+```
+</rewritten_file><|eot_id|>
+
