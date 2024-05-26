@@ -1,36 +1,13 @@
 import re
 import logging
-from whisper.model import Whisper
-from whisper import load_model
+import aiohttp
 import config.botSettings as config
 
+async def transcribe_whisper_api(file_path, language):
+    async with aiohttp.ClientSession() as session:
+        with open(file_path, 'rb') as f:
+            audio_data = f.read()
+        async with session.post(config.WHISPER_ASR_WEBSERVICE_URL, data={'file': audio_data, 'language': language}) as response:
+            result = await response.json()
+            return result['text']
 
-def transcribe_whisper(model, file_path, language="ru"):
-    whisper_model: Whisper = model
-    logging.info("Audio recognition started (whisper)")
-    result = whisper_model.transcribe(file_path, verbose=False, language=language, fp16=False)
-    rawtext = " ".join([segment["text"].strip() for segment in result["segments"]])  # type: ignore
-    rawtext = re.sub(" +", " ", rawtext)
-    alltext = re.sub(r"([\.\!\?]) ", r"\1\n", rawtext)
-    logging.info(f"Recognized: {alltext}")
-    return alltext
-
-
-def load_whisper_model(lang_code) -> Whisper:
-    whisper_model = config.whisper_model + ("." + lang_code if lang_code == "en" else "")
-    return load_model(whisper_model)
-
-
-""" # TODO: Add async transcribe_whisper and transcribe_vosk
-async def stt(audio_file_path) -> str:
-    logging.info('Audio recognition started')
-    loop = asyncio.get_event_loop()
-    try:
-        return await loop.run_in_executor(None, transcribe_whisper, audio_file_path)
-    except:
-        await asyncio.sleep(30)
-        try:
-            return await loop.run_in_executor(None, transcribe_whisper, audio_file_path)
-        except:
-            await asyncio.sleep(30)
-            return await loop.run_in_executor(None, transcribe_whisper, audio_file_path) """

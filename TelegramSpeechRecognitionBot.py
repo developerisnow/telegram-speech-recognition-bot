@@ -20,7 +20,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import config.botSettings as config
 
 from services.filesUtils import convert_to_wav, delete_file, unique_filename
-from services.vosk import load_vosk_model, transcribe_vosk
+# from services.vosk import load_vosk_model, transcribe_vosk
 from services.whisper import load_whisper_model, transcribe_whisper 
 
 from states import VoiceRecognitionStates
@@ -96,7 +96,7 @@ async def process_language_choice(message: types.Message, state: FSMContext):
         file_audio_path = voice_data['file_audio_path']
 
         if config.speech_recognition_lib == 'whisper':
-            text = transcribe_whisper(whisper_model, file_audio_path, language=lang_code)
+            text = await transcribe_whisper_api(file_audio_path, lang_code)
         else:                        
             # Конвертирование файла в WAV 16000 Гц и одноканальный формат
             converted_file_path = convert_to_wav(file_audio_path)
@@ -171,6 +171,13 @@ async def download(url, session: aiohttp.ClientSession) -> str:
     async with session.get(url) as response:
         return await response.text()
 
+async def transcribe_whisper_api(file_path, language):
+    async with aiohttp.ClientSession() as session:
+        with open(file_path, 'rb') as f:
+            audio_data = f.read()
+        async with session.post(config.WHISPER_ASR_WEBSERVICE_URL, data={'file': audio_data, 'language': language}) as response:
+            result = await response.json()
+            return result['text']
 
 if __name__ == '__main__':    
     while True:
